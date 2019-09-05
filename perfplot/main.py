@@ -4,7 +4,7 @@ import timeit
 import termtables as tt
 import matplotlib.pyplot as plt
 import numpy
-from tqdm import tqdm
+from tqdm.auto import tqdm
 import sys
 
 # Orders of Magnitude for SI time units in {unit: magnitude} format
@@ -157,11 +157,11 @@ def bench(
     timings = numpy.empty((len(kernels), len(n_range)), dtype=numpy.uint64)
 
     try:
-        for i, n in enumerate(tqdm(n_range)):
+        for i, n in enumerate(tqdm(n_range, leave=True, desc="n_range")):
             data = setup(n)
             if equality_check:
                 reference = kernels[0](data)
-            for k, kernel in enumerate(tqdm(kernels)):
+            for k, kernel in enumerate(tqdm(kernels, leave=False, desc="kernels")):
                 if equality_check:
                     assert equality_check(
                         reference, kernel(data)
